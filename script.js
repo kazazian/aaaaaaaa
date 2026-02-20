@@ -238,11 +238,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   //16
-  let btn16=document.querySelector('[data-js="t16-animate"]')
-  let animatedBox = document.querySelector('[data-js="t16-box"]'); 
-  btn16.addEventListener('click',()=>{
-   animatedBox.classList.toggle('is-bouncing');
+  let btn16 = document.querySelector('[data-js="t16-animate"]')
+  let animatedBox = document.querySelector('[data-js="t16-box"]')
+
+  btn16.addEventListener('click', () => {
+    let start = null
+    let duration = 1000 
+    let height = 900 
+
+    function animate(timestamp) {
+      if (!start) start = timestamp
+      let progress = timestamp - start
+      let x = height * (progress / duration) 
+
+      animatedBox.style.transform = `translateX(${x}px)`
+
+      if (progress < duration) {
+        requestAnimationFrame(animate)
+      } else {
+        animatedBox.style.transform = 'translateX(0)'
+      }
+    }
+
+    requestAnimationFrame(animate)
   })
+  
   //17
   let area16=document.querySelector('[data-js="t17-area"]')
   function Appear(){
@@ -268,9 +288,9 @@ document.addEventListener("DOMContentLoaded", () => {
     div18.style.position = 'absolute';
     area18.append(div18)
     div18.style.left=area18Width+'px'
-    requestAnimationFrame(()=>animDiv(div18))
+    requestAnimationFrame(()=>animDiv1(div18))
   }
-  function animDiv(div18){
+  function animDiv1(div18){
     let currentLeft=parseInt(div18.style.left)
     let newLeft=currentLeft-1
     div18.style.left=newLeft+'px'
@@ -278,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
       div18.remove()
       return
     }
-    requestAnimationFrame(()=>animDiv(div18))
+    requestAnimationFrame(()=>animDiv1(div18))
   }
   //19
   let area19=document.querySelector('[data-js="t19-area"]')
@@ -293,10 +313,10 @@ document.addEventListener("DOMContentLoaded", () => {
     area19.append(div19)
     div19.style.top = Math.random() * 220 + 'px';
     div19.style.left=area19Width+'px'
-    requestAnimationFrame(()=>animDiv(div19))
+    requestAnimationFrame(()=>animDiv2(div19))
   }
 
-  function animDiv(div19){
+  function animDiv2(div19){
     let currentLeft=parseInt(div19.style.left)
     let newLeft=currentLeft-1
     div19.style.left=newLeft+'px'
@@ -304,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
       div19.remove()
       return
     }
-    requestAnimationFrame(()=>animDiv(div19))
+    requestAnimationFrame(()=>animDiv2(div19))
   }
   //20
   let scoreEl=document.querySelector('[data-js="t20-score"]')
@@ -332,41 +352,30 @@ document.addEventListener("DOMContentLoaded", () => {
   let score2=0
   let scoreEl2=document.querySelector('[data-js="t21-score"]')
   let GameOver=document.querySelector('[data-js="t21-game-over"]')
-  let gameIsover=false
+  
   let livesEl=document.querySelector('[data-js="t21-lives"]')
   let lives=3
   let restart=document.querySelector('[data-js="t21-restart"]')
   let gameInterval=setInterval(createDiv4,1000)
 
   function createDiv4(){
+    let gameIsover=false
     let div21=document.createElement('div')
     div21.className='box'
     div21.style.position = 'absolute';
     area21.append(div21)
     div21.style.top = Math.random() * 220 + 'px';
     div21.style.left=area21Width+'px'
-    requestAnimationFrame(()=>animDiv(div21))
+    requestAnimationFrame(()=>animDiv3(div21))
     div21.addEventListener('click',()=>{
-      div21.remove()
-      score2+=1
-      scoreEl2.textContent=score2
-    
+      if (!gameIsover){
+        div21.remove()
+        score2+=1
+        scoreEl2.textContent=score2
+      }
   })
-  }
-  restart.addEventListener('click',()=>{
-    clearInterval(gameInterval)
-    GameOver.hidden=true
-    gameIsover=false
-    lives = 3
-    livesEl.textContent = lives
-    score2=0
-    document.querySelectorAll('.box').forEach(el => el.remove())
-    scoreEl2.textContent=score2
-    gameInterval = setInterval(createDiv4, 1000)
-  })
-  function animDiv(div21){
+    function animDiv3(div21){
     if(gameIsover)return
-
     let currentLeft=parseInt(div21.style.left)
     let newLeft=currentLeft-1
     div21.style.left=newLeft+'px'
@@ -383,8 +392,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return
     }
-    requestAnimationFrame(()=>animDiv(div21))
+    requestAnimationFrame(()=>animDiv3(div21))
   }
+  }
+  restart.addEventListener('click',()=>{
+    clearInterval(gameInterval)
+    GameOver.hidden=true
+    gameIsover=false
+    lives = 3
+    livesEl.textContent = lives
+    score2=0
+    document.querySelectorAll('.box').forEach(el => el.remove())
+    scoreEl2.textContent=score2
+    gameInterval = setInterval(createDiv4, 1000)
+  })
+
 
 
   enableTooltips();
