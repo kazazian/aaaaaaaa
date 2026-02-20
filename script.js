@@ -332,10 +332,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let score2=0
   let scoreEl2=document.querySelector('[data-js="t21-score"]')
   let GameOver=document.querySelector('[data-js="t21-game-over"]')
+  let gameIsover=false
   let livesEl=document.querySelector('[data-js="t21-lives"]')
   let lives=3
   let restart=document.querySelector('[data-js="t21-restart"]')
-  setInterval(createDiv4,1000)
+  let gameInterval=setInterval(createDiv4,1000)
 
   function createDiv4(){
     let div21=document.createElement('div')
@@ -352,18 +353,33 @@ document.addEventListener("DOMContentLoaded", () => {
     
   })
   }
+  restart.addEventListener('click',()=>{
+    clearInterval(gameInterval)
+    GameOver.hidden=true
+    gameIsover=false
+    lives = 3
+    livesEl.textContent = lives
+    score2=0
+    document.querySelectorAll('.box').forEach(el => el.remove())
+    scoreEl2.textContent=score2
+    gameInterval = setInterval(createDiv4, 1000)
+  })
   function animDiv(div21){
+    if(gameIsover)return
+
     let currentLeft=parseInt(div21.style.left)
     let newLeft=currentLeft-1
     div21.style.left=newLeft+'px'
     if(newLeft+div21.offsetWidth<=0){
       div21.remove()
-      lives-=1
+      if (lives>0){
+        lives--
+      }
       livesEl.textContent=lives
       if (lives==0){
         GameOver.hidden=false
-        
-        
+        gameIsover=true
+        clearInterval(gameInterval)
       }
       return
     }
