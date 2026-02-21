@@ -360,6 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function createDiv4(){
     let gameIsover=false
+    let clicked=false
     let div21=document.createElement('div')
     div21.className='box'
     div21.style.position = 'absolute';
@@ -369,12 +370,14 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(()=>animDiv3(div21))
     div21.addEventListener('click',()=>{
       if (!gameIsover){
+        clicked=true
         div21.remove()
         score2+=1
         scoreEl2.textContent=score2
       }
   })
     function animDiv3(div21){
+    if(gameIsover || clicked) return
     if(gameIsover)return
     let currentLeft=parseInt(div21.style.left)
     let newLeft=currentLeft-1
